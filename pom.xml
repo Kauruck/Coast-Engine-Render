@@ -11,6 +11,7 @@
     <distributionManagement>
         <repository>
             <id>kauruck-maven</id>
+<<<<<<< HEAD
             <url>http://maven-kauruck.ddns.net/snapshots</url>
         </repository>
     </distributionManagement>
@@ -53,6 +54,29 @@
     </repositories>
 
 
+=======
+            <url>https://maven-kauruck.ddns.net/snapshots</url>
+        </repository>
+    </distributionManagement>
+
+    <name>coastengine-centum</name>
+    <url>https://github.com/Kauruck/CoastEngine-Render</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <skipTests>true</skipTests>
+        <!--<maven.compiler.source>14</maven.compiler.source>
+        <maven.compiler.target>14</maven.compiler.target>-->
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>kauruck-maven</id>
+            <url>http://maven-kauruck.ddns.net/snapshots</url>
+        </repository>
+    </repositories>
+
+>>>>>>> 327762659634fd8be2efef9a6a4ee44f1a8f2a44
     <dependencies>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -79,7 +103,11 @@
         <dependency>
             <groupId>com.kauruck.coastengine</groupId>
             <artifactId>coastengine.core</artifactId>
+<<<<<<< HEAD
             <version>2.1-SNAPSHOT</version>
+=======
+            <version>2.0-SNAPSHOT</version>
+>>>>>>> 327762659634fd8be2efef9a6a4ee44f1a8f2a44
         </dependency>
 
         <dependency>
@@ -88,6 +116,7 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+<<<<<<< HEAD
         <dependency>
             <groupId>org.lwjgl</groupId>
             <artifactId>lwjgl</artifactId>
@@ -416,3 +445,64 @@
 
 
 </project>
+=======
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12.4</version>
+                <configuration>
+                    <skipTests>${skipTests}</skipTests>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>14</source>
+                    <target>14</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>-->
+        </plugins>
+    </build>
+
+</project>
+>>>>>>> 327762659634fd8be2efef9a6a4ee44f1a8f2a44

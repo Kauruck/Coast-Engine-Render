@@ -6,7 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+<<<<<<< HEAD
         <module name="CoastEngine-Render" />
+=======
+        <module name="Render" />
+>>>>>>> 327762659634fd8be2efef9a6a4ee44f1a8f2a44
       </profile>
     </annotationProcessing>
   </component>
