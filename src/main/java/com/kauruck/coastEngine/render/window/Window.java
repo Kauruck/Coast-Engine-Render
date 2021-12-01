@@ -1,8 +1,6 @@
-package com.kauruck.coastengine.render.window;
+package com.kauruck.coastEngine.render.window;
 
 import com.kauruck.coastEngine.core.exception.NoSuchProcessException;
-import com.kauruck.coastEngine.core.threding.ThreadManger;
-import com.kauruck.coastengine.render.rendering.Renderable;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.system.MemoryStack;
@@ -26,27 +24,13 @@ public class Window {
 
     private static int pid = 0;
 
-    private static List<Renderable> renderables = new ArrayList<>();
-
     private Window(String title) throws NoSuchProcessException {
         if(Window.inited)
             throw new IllegalStateException("The max. amount of windows is 1");
         this.title = title;
 
         this.init();
-
-        pid = ThreadManger.addThread(new UpdateThread(30.0f));
-        ThreadManger.startTread(pid);
     }
-
-    public static void scheduleRendering(Renderable renderable){
-        Window.renderables.add(renderable);
-    }
-
-    public static List<Renderable> getRenderables() {
-        return renderables;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -122,4 +106,6 @@ public class Window {
 
         // Make the window visible
         glfwShowWindow(id);
+        //Release the context so that the render threads can use it
+        glfwMakeContextCurrent(NULL);
     }}

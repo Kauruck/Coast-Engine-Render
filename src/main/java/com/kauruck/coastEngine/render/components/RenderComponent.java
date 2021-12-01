@@ -1,7 +1,7 @@
-package com.kauruck.coastengine.render.components;
+package com.kauruck.coastEngine.render.components;
 
 import com.kauruck.coastEngine.centum.component.AbstractComponent;
-import com.kauruck.coastengine.render.rendering.BaseRender;
+import com.kauruck.coastEngine.render.rendering.BaseRender;
 
 public class RenderComponent extends AbstractComponent {
     private final BaseRender render;
