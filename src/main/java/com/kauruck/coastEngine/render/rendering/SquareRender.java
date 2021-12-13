@@ -1,6 +1,7 @@
 package com.kauruck.coastEngine.render.rendering;
 
 import com.kauruck.coastEngine.centum.entity.Entity;
+import com.kauruck.coastEngine.render.components.RenderComponent;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -11,6 +12,7 @@ public class SquareRender extends BaseRender {
             0.5f, -0.5f, 0f,
             0f,0.5f,0f};
     private final int[] indices = {0,1,2};
+    private final float[] uvs = {0,0,0};
 
     private Mesh mesh;
 
@@ -24,11 +26,11 @@ public class SquareRender extends BaseRender {
     @Override
     public void create() {
         INSTANCE = new SquareRender();
-        INSTANCE.mesh = RenderHelper.createMesh(vertices, indices);
+        INSTANCE.mesh = RenderHelper.createMesh(vertices, uvs, indices);
     }
 
     @Override
-    public void render(Entity entity) {
+    public void render(RenderComponent component, Entity entity) {
         GL30.glBindVertexArray(mesh.getVaoID());
         GL20.glEnableVertexAttribArray(0);
         GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getVertexCount(), GL11.GL_UNSIGNED_INT,0);

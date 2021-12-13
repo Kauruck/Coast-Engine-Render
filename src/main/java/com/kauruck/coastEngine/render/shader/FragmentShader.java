@@ -1,18 +1,12 @@
-package com.kauruck.coastEngine.render.textures;
+package com.kauruck.coastEngine.render.shader;
 
 import com.kauruck.coastEngine.core.resources.ResourceLocation;
 
-import java.util.HashMap;
-
-public class Texture {
-
-    public static final HashMap<ResourceLocation, Integer> TEXTURE_IDS = new HashMap<>();
-
+public class FragmentShader {
+    private final int id;
     private final ResourceLocation resourceLocation;
 
-    private final int id;
-
-    public Texture(int id, ResourceLocation resourceLocation) {
+    public FragmentShader(int id, ResourceLocation resourceLocation) {
         this.id = id;
         this.resourceLocation = resourceLocation;
     }

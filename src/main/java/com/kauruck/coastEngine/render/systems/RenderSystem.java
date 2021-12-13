@@ -14,7 +14,7 @@ public class RenderSystem extends AbstractSystem<RenderComponent> {
     public void process(AbstractComponent component, float deltaTime) {
         if(component instanceof RenderComponent){
             RenderComponent rc = (RenderComponent) component;
-            rc.getRender().render(component.getEntity());
+            rc.getRender().render((RenderComponent) component, component.getEntity());
         }
     }
 }
