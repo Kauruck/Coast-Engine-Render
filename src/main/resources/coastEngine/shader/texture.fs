@@ -1,11 +1,10 @@
-#version 450 core
+#version 400 core
 
-in vec3 exColour;
-in vec2 pass_uvs;
+in vec3 color;
 
 out vec4 fragColor;
 
 void main()
 {
-    fragColor = vec4(exColour, 1.0);
+    fragColor = vec4(0.0, 1.0, 1.0 , 1.0);
 }

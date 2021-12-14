@@ -15,7 +15,7 @@ public class FragmentShaderHandler extends ResourceHandler<FragmentShader> {
 
     @Override
     public FragmentShader loadFromString(String source, ResourceLocation resourceLocation) {
-        int id = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
+        int id = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
         GL20.glShaderSource(id, source);
         GL20.glCompileShader(id);
         if(GL20.glGetShaderi(id, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE){

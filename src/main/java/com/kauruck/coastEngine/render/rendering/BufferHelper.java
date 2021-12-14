@@ -55,4 +55,11 @@ public class BufferHelper {
         return vao;
     }
 
+    public static void unbindVAO(){
+        GL30.glBindVertexArray(0);
+    }
+
+    public static void bindVAO(int vao) {
+        GL30.glBindVertexArray(vao);
+    }
 }

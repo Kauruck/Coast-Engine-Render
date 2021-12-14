@@ -36,10 +36,10 @@ public abstract class Shader {
         programID = GL20.glCreateProgram();
         GL20.glAttachShader(programID, vertexShader.getId());
         GL20.glAttachShader(programID, fragmentShader.getId());
-        bindAttributes();
         GL20.glLinkProgram(programID);
         GL20.glValidateProgram(programID);
-        getAllUniformLocations();
+        //getAllUniformLocations();
+        bindAttributes();
     }
 
     public void start(){
@@ -77,6 +77,7 @@ public abstract class Shader {
         }
         GL20.glUniform1f(location, tovec);
     }
+
 
     //TODO Add Matrix to Core
     /*

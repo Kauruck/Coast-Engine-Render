@@ -13,6 +13,6 @@ public class Mesh {
         return vao;
     }
     public int getVertexCount() {
-        return vertices/3;
+        return vertices;
     }
 }

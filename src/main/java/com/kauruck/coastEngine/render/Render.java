@@ -54,7 +54,7 @@ public class Render {
             glfwMakeContextCurrent(Window.getId());
             GL.createCapabilities();
             glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
-            LOGGER.info("Adding renders " + renders.size());
+            LOGGER.info("Adding " + renders.size() + " renders.");
             for(BaseRender current : renders){
                 current.create();
             }

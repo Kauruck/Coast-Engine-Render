@@ -15,32 +15,24 @@ import java.io.IOException;
 
 public class TextureRender extends BaseRender{
 
-    float[] vertices = new float[]{
-            -0.5f,  0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            0.5f,  0.5f, 0.0f,
+    public static float[] VERTICES = {
+            -0.5f, 0.5f, 0, //V0
+            -0.5f, -0.5f, 0, //V1
+            0.5f, -0.5f, 0, //V2
+            0.5f, 0.5f, 0 // V3
     };
-    int[] indices = new int[]{
-            0, 1, 3, 3, 1, 2,
-    };
-    private final float[] uvs = {0,1};
-    float[] colours = new float[]{
-            0.5f, 0.0f, 0.0f,
-            0.0f, 0.5f, 0.0f,
-            0.0f, 0.0f, 0.5f,
-            0.0f, 0.5f, 0.5f,
+    public static final int[] INDICES = new int[]{
+            0, 1, 3, //TOP LEFT V0 V1 V3
+            3, 1, 2 // BOTTOM RIGHT V3 V1 V2
     };
 
     private TextureShader shader;
-    private Mesh mesh;
 
     public static TextureRender INSTANCE;
 
     @Override
     public void create() {
         INSTANCE = new TextureRender();
-        INSTANCE.mesh = RenderHelper.createMesh(vertices, uvs, indices, colours);
         try {
             INSTANCE.shader = new TextureShader();
         } catch (NoHandlerException | IOException e) {
@@ -49,22 +41,17 @@ public class TextureRender extends BaseRender{
     }
 
     @Override
-    public void render(RenderComponent component, Entity entity) {
-        if(!(component instanceof TextureComponent))
+    public void render(RenderComponent pComponent, Entity entity) {
+        if(!(pComponent instanceof TextureComponent))
             return;
 
+        TextureComponent component = (TextureComponent) pComponent;
+
         shader.start();
-        GL30.glBindVertexArray(mesh.getVaoID());
+        GL30.glBindVertexArray(component.getMesh().getVaoID());
         GL20.glEnableVertexAttribArray(0);
-        GL20.glEnableVertexAttribArray(1);
-        GL20.glEnableVertexAttribArray(2);
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, ((TextureComponent)component).getTexture().getId());
-        //GL11.glDrawElements(GL11.GL_TRIANGLES, mesh.getVertexCount(), GL11.GL_UNSIGNED_INT,0);
-        GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, mesh.getVertexCount());
+        GL11.glDrawElements(GL11.GL_TRIANGLES, component.getMesh().getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
         GL20.glDisableVertexAttribArray(0);
-        GL20.glDisableVertexAttribArray(1);
-        GL20.glDisableVertexAttribArray(2);
         GL30.glBindVertexArray(0);
         shader.stop();
     }
