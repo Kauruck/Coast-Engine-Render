@@ -1,6 +1,9 @@
 package com.kauruck.coastEngine.render.window;
 
 import com.kauruck.coastEngine.core.exception.NoSuchProcessException;
+import com.kauruck.coastEngine.core.input.Input;
+import com.kauruck.coastEngine.core.input.KeyCode;
+import com.kauruck.coastEngine.render.input.KeyHelper;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.system.MemoryStack;
@@ -76,8 +79,17 @@ public class Window {
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(id, (window, key, scancode, action, mods) -> {
-            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
+            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE ) {
                 glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+            }
+            KeyCode code = KeyHelper.parseKeyCode(key);
+            if(code != KeyCode.None){
+                if(action == GLFW_PRESS) {
+                    Input.onKeyDown(code);
+                }else if(action == GLFW_RELEASE){
+                    Input.onKeyUp(code);
+                }
+            }
         });
 
         // Get the thread stack and push a new frame

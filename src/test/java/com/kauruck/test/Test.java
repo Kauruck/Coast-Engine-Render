@@ -38,7 +38,8 @@ public class Test {
             }
             world.setActive(true);
             Entity testEntity = new Entity();
-            testEntity.addComponent(new SquareComponent(new Color(0.0f, 1.0f, 0.0f, 1.0f)));
+            SquareComponent square = new SquareComponent(new Color(0.0f, 1.0f, 0.0f, 1.0f));
+            testEntity.addComponent(square);
             world.addEntity(testEntity);
         });
 

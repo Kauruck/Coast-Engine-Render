@@ -2,6 +2,7 @@ package com.kauruck.coastEngine.render;
 
 import com.kauruck.coastEngine.centum.Centum;
 import com.kauruck.coastEngine.core.exception.NoSuchProcessException;
+import com.kauruck.coastEngine.core.input.Input;
 import com.kauruck.coastEngine.core.resources.ResourceLoader;
 import com.kauruck.coastEngine.core.threding.ThreadManger;
 import com.kauruck.coastEngine.render.components.RenderComponent;
@@ -62,7 +63,7 @@ public class Render {
         }, (Centum.OnTickStartExecutor) Render::onTick,
         (Centum.OnTickEndExecutor) () -> {
             glfwSwapBuffers(Window.getId());
-
+            Input.update();
         });
     }
 
