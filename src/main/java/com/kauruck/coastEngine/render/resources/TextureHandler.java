@@ -15,6 +15,8 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.lwjgl.opengl.GL11.GL_UNPACK_ALIGNMENT;
+
 public class TextureHandler extends ResourceHandler<Texture> {
     @Override
     public String[] getValidFileExtensions() {
@@ -44,11 +46,11 @@ public class TextureHandler extends ResourceHandler<Texture> {
                 id.set(GL11.glGenTextures());
                 Texture.TEXTURE_IDS.put(resourceLocation, id.get());
                 GL11.glBindTexture(GL11.GL_TEXTURE_2D, id.get());
-                GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
 
+                GL11.glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
                 GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
                 GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-                STBImage.stbi_image_free(buffer);
+                //Maybe I do need a stbi_image_free, but I think I don't, for that i never load an image with stbi_image_load
 
             } catch(Exception e) {
                 e.printStackTrace();

@@ -9,8 +9,23 @@ import org.lwjgl.opengl.GL20;
 
 import java.io.IOException;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Shader {
+
+    public static final List<Shader> shaders = new ArrayList<>();
+
+    public static void cleanUp(){
+        for(Shader current : shaders){
+            GL20.glDetachShader(current.programID, current.fragmentShader.getId());
+            GL20.glDetachShader(current.programID, current.vertexShader.getId());
+            GL20.glDeleteShader(current.fragmentShader.getId());
+            GL20.glDeleteShader(current.vertexShader.getId());
+            GL20.glDeleteProgram(current.programID);
+        }
+    }
+
     private int programID;
 
     private FloatBuffer matrix = BufferUtils.createFloatBuffer(16);
@@ -28,6 +43,7 @@ public abstract class Shader {
         GL20.glLinkProgram(programID);
         GL20.glValidateProgram(programID);
         getAllUniformLocations();
+        shaders.add(this);
     }
 
     public Shader(ResourceLocation resourceLocation) throws NoHandlerException, IOException {
@@ -40,6 +56,7 @@ public abstract class Shader {
         GL20.glValidateProgram(programID);
         //getAllUniformLocations();
         bindAttributes();
+        shaders.add(this);
     }
 
     public void start(){

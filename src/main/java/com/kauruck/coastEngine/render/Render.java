@@ -12,6 +12,7 @@ import com.kauruck.coastEngine.render.rendering.TextureRender;
 import com.kauruck.coastEngine.render.resources.TextureHandler;
 import com.kauruck.coastEngine.render.shader.FragmentShader;
 import com.kauruck.coastEngine.render.resources.FragmentShaderHandler;
+import com.kauruck.coastEngine.render.shader.Shader;
 import com.kauruck.coastEngine.render.shader.VertexShader;
 import com.kauruck.coastEngine.render.resources.VertexShaderHandler;
 import com.kauruck.coastEngine.render.systems.RenderSystem;
@@ -106,6 +107,10 @@ public class Render {
             e.printStackTrace();
         }
 
+        glfwMakeContextCurrent(Window.getId());
+        GL.createCapabilities();
+        cleanUp();
+
         // Free the window callbacks and destroy the window
         glfwFreeCallbacks(Window.getId());
         glfwDestroyWindow(Window.getId());
@@ -147,6 +152,11 @@ public class Render {
             if(callback != null)
                 callback.execute();
         }
+    }
+
+    public static void cleanUp(){
+        Shader.cleanUp();
+        Texture.cleanUp();
     }
 
 }
