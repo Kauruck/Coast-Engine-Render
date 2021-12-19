@@ -35,6 +35,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Render {
 
+    public static boolean GL_DEBUG = false;
 
     public static final Logger LOGGER = LoggerFactory.getLogger("Render");
 
@@ -67,7 +68,8 @@ public class Render {
         Centum.registerSystem(new RenderSystem(30, RenderComponent.class), (Centum.OnStartExecutor) () -> {
             glfwMakeContextCurrent(Window.getId());
             GL.createCapabilities();
-            GLUtil.setupDebugMessageCallback(System.out);
+            if(GL_DEBUG)
+                GLUtil.setupDebugMessageCallback(System.out);
             glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
             LOGGER.info("Adding " + renders.size() + " renders.");
             for(BaseRender current : renders){
