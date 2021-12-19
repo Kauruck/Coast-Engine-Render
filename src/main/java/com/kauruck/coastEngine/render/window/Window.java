@@ -27,6 +27,12 @@ public class Window {
 
     private static int pid = 0;
 
+    private static boolean resized = false;
+
+    private static int width = 0;
+
+    private static int height = 0;
+
     private Window(String title) throws NoSuchProcessException {
         if(Window.inited)
             throw new IllegalStateException("The max. amount of windows is 1");
@@ -92,6 +98,12 @@ public class Window {
             }
         });
 
+        glfwSetFramebufferSizeCallback(id, (window, nWidth, nHeight) -> {
+            width = nWidth;
+            height = nHeight;
+            resized = true;
+        });
+
         // Get the thread stack and push a new frame
         try ( MemoryStack stack = stackPush() ) {
             IntBuffer pWidth = stack.mallocInt(1); // int*
@@ -120,4 +132,21 @@ public class Window {
         glfwShowWindow(id);
         //Release the context so that the render threads can use it
         glfwMakeContextCurrent(NULL);
-    }}
+    }
+
+    public static boolean isResized() {
+        return resized;
+    }
+
+    public static int getWidth() {
+        return width;
+    }
+
+    public static int getHeight() {
+        return height;
+    }
+
+    public static void setResized(boolean resized) {
+        Window.resized = resized;
+    }
+}

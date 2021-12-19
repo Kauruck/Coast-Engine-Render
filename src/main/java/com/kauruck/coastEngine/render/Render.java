@@ -87,6 +87,12 @@ public class Render {
 
     public static void onTick(){
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT|GL11.GL_DEPTH_BUFFER_BIT);
+
+        if ( Window.isResized()) {
+            glViewport(0, 0, Window.getWidth(), Window.getHeight());
+            Window.setResized(false);
+        }
+
         List<RenderThreadScheduleWithCallback> toRender = List.copyOf(schedules);
         schedules.clear();
         for(RenderThreadScheduleWithCallback current : toRender){
