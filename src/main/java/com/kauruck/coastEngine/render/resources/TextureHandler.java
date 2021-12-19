@@ -15,7 +15,8 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.lwjgl.opengl.GL11.GL_UNPACK_ALIGNMENT;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.stb.STBImage.*;
 
 public class TextureHandler extends ResourceHandler<Texture> {
     @Override
@@ -27,30 +28,50 @@ public class TextureHandler extends ResourceHandler<Texture> {
     public Texture loadFromStream(InputStream s, ResourceLocation resourceLocation) {
         AtomicInteger id = new AtomicInteger(-1);
         Render.scheduleOnRenderThreadBlocking(() -> {
-            int width;
-            int height;
-            ByteBuffer buffer;
+
             try (MemoryStack stack = MemoryStack.stackPush()){
-                IntBuffer w = stack.mallocInt(1);
-                IntBuffer h = stack.mallocInt(1);
-
-                byte[] bytes = s.readAllBytes();
-
-                buffer = BufferUtils.createByteBuffer(bytes.length);
-                buffer.put(bytes);
-                buffer.flip();
-
-                width = w.get();
-                height = h.get();
-
                 id.set(GL11.glGenTextures());
-                Texture.TEXTURE_IDS.put(resourceLocation, id.get());
-                GL11.glBindTexture(GL11.GL_TEXTURE_2D, id.get());
+                GL11.glBindTexture(GL_TEXTURE_2D, id.get());
 
-                GL11.glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-                GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-                GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-                //Maybe I do need a stbi_image_free, but I think I don't, for that i never load an image with stbi_image_load
+                // Set texture parameters
+                // Repeat image in both directions
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                // When stretching the image, pixelate
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                // When shrinking an image, pixelate
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+                IntBuffer width = stack.mallocInt(1);
+                IntBuffer height = stack.mallocInt(1);
+                IntBuffer channels = stack.mallocInt(1);
+
+                byte[] data = s.readAllBytes();
+
+                ByteBuffer imageBuffer = stack.malloc(data.length);
+                imageBuffer.put(data);
+                imageBuffer.flip();
+
+                ByteBuffer image = stbi_load_from_memory(imageBuffer, width, height, channels, 0);
+
+                if (image != null) {
+                    if (channels.get(0) == 3) {
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width.get(0), height.get(0),
+                                0, GL_RGB, GL_UNSIGNED_BYTE, image);
+                    } else if (channels.get(0) == 4) {
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width.get(0), height.get(0),
+                                0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+                    } else {
+                        assert false : "Error: (Texture) Unknown number of channesl '" + channels.get(0) + "'";
+                    }
+                } else {
+                    assert false : "Error: (Texture) Could not load image '" + resourceLocation + "'";
+                }
+
+                stbi_image_free(image);
+
+                Texture.TEXTURE_IDS.put(resourceLocation, id.get());
+
 
             } catch(Exception e) {
                 e.printStackTrace();

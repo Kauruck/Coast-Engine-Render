@@ -7,7 +7,7 @@ public class Mesh {
 
     //Names for the VBOs
     public static final String POSITION_BUFFER = "position";
-    public static final String COLOR_BUFFER = "color";
+    public static final String UV_BUFFER = "uv";
 
     private int vao;
     private int vertices;

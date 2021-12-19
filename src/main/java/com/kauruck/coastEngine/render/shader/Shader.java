@@ -151,4 +151,8 @@ public abstract class Shader {
             }
         }
     }
+
+    protected void loadInt(String name, int value) throws Exception {
+        GL20.glUniform1i(getUniformID(name), value);
+    }
 }

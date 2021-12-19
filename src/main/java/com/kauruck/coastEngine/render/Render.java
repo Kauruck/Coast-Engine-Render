@@ -35,6 +35,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Render {
 
+
     public static final Logger LOGGER = LoggerFactory.getLogger("Render");
 
     public static float FOV = 70;

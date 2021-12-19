@@ -1,6 +1,6 @@
 #version 130
 
-in vec3 out_uv;
+in vec2 out_uv;
 
 out vec4 fragColor;
 

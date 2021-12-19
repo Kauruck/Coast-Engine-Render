@@ -43,9 +43,13 @@ public class Test {
             }
             world.setActive(true);
             Entity testEntity = new Entity();
+            Entity testEntity2 = new Entity();
             SquareComponent square = new SquareComponent(new Color(0.0f, 1.0f, 0.0f, 1.0f));
-            testEntity.addComponent(square);
+            testEntity2.addComponent(square);
+            TextureComponent component = new TextureComponent(testTexture);
+            testEntity.addComponent(component);
             world.addEntity(testEntity);
+            world.addEntity(testEntity2);
             Input.registerKeyListener(KeyCode.B, KeyAction.Down, () -> {
                 square.setColor(new Color(0.0f, 0.0f, 1.0f, 1.0f));
             });
@@ -59,6 +63,13 @@ public class Test {
             transform.setScale(1);
 
             testEntity.addComponent(transform);
+
+            Transform transform2 = new Transform();
+            transform2.setPosition(new Vector3(1,0,-1 ));
+            transform2.setRotation(new Vector3(0, 0, 0));
+            transform2.setScale(1);
+
+            testEntity2.addComponent(transform2);
 
         });
 
