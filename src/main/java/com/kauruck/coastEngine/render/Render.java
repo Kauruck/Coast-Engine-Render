@@ -61,7 +61,9 @@ public class Render {
                 current.create();
             }
 
-        }, (Centum.OnTickStartExecutor) Render::onTick,
+        },
+            (Centum.OnEndExecutor) Render::cleanUp
+        , (Centum.OnTickStartExecutor) Render::onTick,
         (Centum.OnTickEndExecutor) () -> {
             glfwSwapBuffers(Window.getId());
             Input.update();
@@ -107,10 +109,6 @@ public class Render {
             e.printStackTrace();
         }
 
-        //TODO Why does this work on linux but not on windows
-        glfwMakeContextCurrent(Window.getId());
-        GL.createCapabilities();
-        cleanUp();
 
         // Free the window callbacks and destroy the window
         glfwFreeCallbacks(Window.getId());
