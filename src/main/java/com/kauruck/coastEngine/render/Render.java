@@ -107,6 +107,7 @@ public class Render {
             e.printStackTrace();
         }
 
+        //TODO Why does this work on linux but not on windows
         glfwMakeContextCurrent(Window.getId());
         GL.createCapabilities();
         cleanUp();

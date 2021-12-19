@@ -5,6 +5,9 @@ import com.kauruck.coastEngine.centum.entity.Entity;
 import com.kauruck.coastEngine.centum.world.World;
 import com.kauruck.coastEngine.core.Core;
 import com.kauruck.coastEngine.core.exception.NoHandlerException;
+import com.kauruck.coastEngine.core.input.Input;
+import com.kauruck.coastEngine.core.input.KeyAction;
+import com.kauruck.coastEngine.core.input.KeyCode;
 import com.kauruck.coastEngine.core.resources.ResourceHandler;
 import com.kauruck.coastEngine.core.resources.ResourceLoader;
 import com.kauruck.coastEngine.core.resources.ResourceLocation;
@@ -41,6 +44,12 @@ public class Test {
             SquareComponent square = new SquareComponent(new Color(0.0f, 1.0f, 0.0f, 1.0f));
             testEntity.addComponent(square);
             world.addEntity(testEntity);
+            Input.registerKeyListener(KeyCode.B, KeyAction.Down, () -> {
+                square.setColor(new Color(0.0f, 0.0f, 1.0f, 1.0f));
+            });
+            Input.registerKeyListener(KeyCode.G, KeyAction.Down, () -> {
+                square.setColor(new Color(0.0f, 1.0f, 0.0f, 1.0f));
+            });
         });
 
     }

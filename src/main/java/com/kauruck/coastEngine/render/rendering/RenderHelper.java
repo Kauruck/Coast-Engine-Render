@@ -7,17 +7,25 @@ public class RenderHelper {
 
     public static Mesh createMesh(float[] positions, int[] indices ) {
         int vao = BufferHelper.genVAO();
-        BufferHelper.storeData(0,3,positions);
+        int posVBO = BufferHelper.storeData(0,3,positions);
         BufferHelper.bindIndices(indices);
         BufferHelper.unbindVAO();
-        return new Mesh(vao,indices.length);
+        Mesh mesh = new Mesh(vao, indices.length);
+        mesh.addVBO(Mesh.POSITION_BUFFER, posVBO);
+        return mesh;
     }
 
 
     public static void setDataToMesh(Mesh mesh, int attribute, int dimensions, float[] data){
-        int vao = mesh.getVaoID();
-        BufferHelper.bindVAO(vao);
-        BufferHelper.storeData(attribute, dimensions, data);
-        BufferHelper.unbindVAO();
+        if(mesh.hasVBO(Mesh.COLOR_BUFFER)) {
+            int vbo = mesh.getVBO(Mesh.COLOR_BUFFER);
+            BufferHelper.updateData(vbo, data);
+        }
+        else {
+            BufferHelper.bindVAO(mesh.getVaoID());
+            int vbo = BufferHelper.storeData(attribute, dimensions, data);
+            BufferHelper.unbindVAO();
+            mesh.addVBO(Mesh.COLOR_BUFFER, vbo);
+        }
     }
 }
