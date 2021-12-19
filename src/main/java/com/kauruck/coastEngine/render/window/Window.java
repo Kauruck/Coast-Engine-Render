@@ -29,9 +29,9 @@ public class Window {
 
     private static boolean resized = false;
 
-    private static int width = 0;
+    private static int width = 300;
 
-    private static int height = 0;
+    private static int height = 300;
 
     private Window(String title) throws NoSuchProcessException {
         if(Window.inited)
@@ -77,9 +77,10 @@ public class Window {
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE); // for debugging
 
         // Create the window
-        id = glfwCreateWindow(300, 300, title, NULL, NULL);
+        id = glfwCreateWindow(width, height, title, NULL, NULL);
         if ( id == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 

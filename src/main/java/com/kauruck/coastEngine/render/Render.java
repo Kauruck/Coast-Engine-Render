@@ -18,8 +18,10 @@ import com.kauruck.coastEngine.render.resources.VertexShaderHandler;
 import com.kauruck.coastEngine.render.systems.RenderSystem;
 import com.kauruck.coastEngine.render.textures.Texture;
 import com.kauruck.coastEngine.render.window.Window;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GLUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +36,13 @@ import static org.lwjgl.opengl.GL11.*;
 public class Render {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("Render");
+
+    public static float FOV = 70;
+
+    private static float NEAR_PLAN = 0.01f;
+    private static float FAR_PLAN = 1000f;
+
+    public static Matrix4f projectionMatrix;
 
     private static List<BaseRender> renders = new ArrayList<>();
 
@@ -51,10 +60,13 @@ public class Render {
         //Register renders
         registerRenderHelper(new SquareRender());
         registerRenderHelper(new TextureRender());
+        //Create Projection Matrix
+        recreateProjectionMatrix();
         //Register Systems
         Centum.registerSystem(new RenderSystem(30, RenderComponent.class), (Centum.OnStartExecutor) () -> {
             glfwMakeContextCurrent(Window.getId());
             GL.createCapabilities();
+            GLUtil.setupDebugMessageCallback(System.out);
             glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
             LOGGER.info("Adding " + renders.size() + " renders.");
             for(BaseRender current : renders){
@@ -68,6 +80,20 @@ public class Render {
             glfwSwapBuffers(Window.getId());
             Input.update();
         });
+    }
+
+    public static void recreateProjectionMatrix(){
+        float aspectRation = (float) Window.getWidth() / (float) Window.getHeight();
+        float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRation);
+        float x_scale = y_scale / aspectRation;
+        float frustum_length = FAR_PLAN - NEAR_PLAN;
+
+        projectionMatrix = new Matrix4f(x_scale, 0, 0, 0,
+                0, y_scale, 0, 0,
+                0, 0, -((FAR_PLAN + NEAR_PLAN) / frustum_length), -1,
+                0, 0, -((2 * FAR_PLAN * NEAR_PLAN) / frustum_length), 0);
+        Shader.reloadProjectionsMatrix();
+
     }
 
     public static void scheduleOnRenderThread(RenderThreadSchedule schedule){
@@ -90,6 +116,7 @@ public class Render {
 
         if ( Window.isResized()) {
             glViewport(0, 0, Window.getWidth(), Window.getHeight());
+            recreateProjectionMatrix();
             Window.setResized(false);
         }
 

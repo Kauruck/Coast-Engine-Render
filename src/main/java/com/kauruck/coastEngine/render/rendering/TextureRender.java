@@ -16,10 +16,10 @@ import java.io.IOException;
 public class TextureRender extends BaseRender{
 
     public static float[] VERTICES = {
-            -0.5f, 0.5f, 0, //V0
-            -0.5f, -0.5f, 0, //V1
-            0.5f, -0.5f, 0, //V2
-            0.5f, 0.5f, 0 // V3
+            -0.5f, 0.5f, -0.5f, //V0
+            -0.5f, -0.5f, -0.5f, //V1
+            0.5f, -0.5f, -0.5f, //V2
+            0.5f, 0.5f, -0.5f // V3
     };
     public static final int[] INDICES = new int[]{
             0, 1, 3, //TOP LEFT V0 V1 V3

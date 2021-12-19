@@ -1,10 +1,13 @@
 package com.kauruck.coastEngine.render.rendering;
 
+import com.kauruck.coastEngine.centum.componetns.Transform;
 import com.kauruck.coastEngine.centum.entity.Entity;
 import com.kauruck.coastEngine.core.exception.NoHandlerException;
 import com.kauruck.coastEngine.render.components.RenderComponent;
 import com.kauruck.coastEngine.render.components.SquareComponent;
+import com.kauruck.coastEngine.render.math.MathUtils;
 import com.kauruck.coastEngine.render.shader.BaseShader;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -53,10 +56,15 @@ public class SquareRender extends BaseRender {
         shader.start();
         GL30.glBindVertexArray(component.getMesh().getVaoID());
         GL20.glEnableVertexAttribArray(0);
-        GL20.glEnableVertexAttribArray(1);
+        Transform transform = (Transform) component.getEntity().getComponent(Transform.class);
+        Matrix4f transformationMatrix = MathUtils.ZERO_TRANSFORM;
+        if(transform != null)
+        transformationMatrix = MathUtils.createTransformationMatrix(transform);
+        shader.loadTransformationMatrix(transformationMatrix);
+        shader.loadColor(component.getColor());
+
         GL11.glDrawElements(GL11.GL_TRIANGLES, component.getMesh().getVertexCount(), GL11.GL_UNSIGNED_INT,0);
         GL20.glDisableVertexAttribArray(0);
-        GL20.glDisableVertexAttribArray(1);
         GL30.glBindVertexArray(0);
         shader.stop();
     }

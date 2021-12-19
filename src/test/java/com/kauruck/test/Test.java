@@ -1,6 +1,7 @@
 package com.kauruck.test;
 
 import com.kauruck.coastEngine.centum.Centum;
+import com.kauruck.coastEngine.centum.componetns.Transform;
 import com.kauruck.coastEngine.centum.entity.Entity;
 import com.kauruck.coastEngine.centum.world.World;
 import com.kauruck.coastEngine.core.Core;
@@ -8,6 +9,7 @@ import com.kauruck.coastEngine.core.exception.NoHandlerException;
 import com.kauruck.coastEngine.core.input.Input;
 import com.kauruck.coastEngine.core.input.KeyAction;
 import com.kauruck.coastEngine.core.input.KeyCode;
+import com.kauruck.coastEngine.core.math.Vector3;
 import com.kauruck.coastEngine.core.resources.ResourceHandler;
 import com.kauruck.coastEngine.core.resources.ResourceLoader;
 import com.kauruck.coastEngine.core.resources.ResourceLocation;
@@ -29,7 +31,7 @@ public class Test {
     public static void main(String[] args) {
         Core.init();
         Render.init();
-        Window.createWindow("com.kauruck.test.Test");
+        Window.createWindow("Test");
         Render.showWindow(() -> {
             World world = new World();
             Centum.registerWorld(world);
@@ -50,6 +52,14 @@ public class Test {
             Input.registerKeyListener(KeyCode.G, KeyAction.Down, () -> {
                 square.setColor(new Color(0.0f, 1.0f, 0.0f, 1.0f));
             });
+
+            Transform transform = new Transform();
+            transform.setPosition(new Vector3(0,0,-1 ));
+            transform.setRotation(new Vector3(0, 0, 0));
+            transform.setScale(1);
+
+            testEntity.addComponent(transform);
+
         });
 
     }

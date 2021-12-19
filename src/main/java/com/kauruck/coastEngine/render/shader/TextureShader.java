@@ -18,5 +18,8 @@ public class TextureShader extends Shader{
     }
 
     @Override
-    protected void getAllUniformLocations() {}
+    protected void getAllUniformLocations() {
+
+    }
+
 }

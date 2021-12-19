@@ -1,5 +1,7 @@
 package com.kauruck.coastEngine.render.color;
 
+import com.kauruck.coastEngine.core.math.Vector3;
+
 public class Color {
 
     private float red;
@@ -46,15 +48,7 @@ public class Color {
         this.alpha = alpha;
     }
 
-    public float[] forGL(int size){
-        float[] out = new float[size * 4];
-        for(int i = 0; i < size * 4; i += 4){
-            out[i] = red;
-            out[i + 1] = green;
-            out[i + 2] = blue;
-            out[i + 3] = alpha;
-        }
-
-        return out;
+    public Vector3 toVector(){
+        return new Vector3(red , green, blue);
     }
 }

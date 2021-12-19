@@ -33,8 +33,5 @@ public class SquareComponent extends RenderComponent{
 
     public void setColor(Color color) {
         this.color = color;
-        Render.scheduleOnRenderThread(() -> {
-            RenderHelper.setDataToMesh(this.getMesh(), 1, 4, color.forGL(getMesh().getVertexCount()));
-        });
     }
 }

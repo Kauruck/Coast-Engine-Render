@@ -4,17 +4,24 @@ import com.kauruck.coastEngine.core.exception.NoHandlerException;
 import com.kauruck.coastEngine.core.math.Vector3;
 import com.kauruck.coastEngine.core.resources.ResourceLoader;
 import com.kauruck.coastEngine.core.resources.ResourceLocation;
+import com.kauruck.coastEngine.render.Render;
+import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.system.MemoryStack;
 
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Shader {
 
     public static final List<Shader> shaders = new ArrayList<>();
+
+    private final Map<String, Integer> uniforms;
 
     public static void cleanUp(){
         for(Shader current : shaders){
@@ -26,9 +33,7 @@ public abstract class Shader {
         }
     }
 
-    private int programID;
-
-    private FloatBuffer matrix = BufferUtils.createFloatBuffer(16);
+    private final int programID;
 
     private final VertexShader vertexShader;
     private final FragmentShader fragmentShader;
@@ -42,7 +47,15 @@ public abstract class Shader {
         bindAttributes();
         GL20.glLinkProgram(programID);
         GL20.glValidateProgram(programID);
+        uniforms = new HashMap<>();
         getAllUniformLocations();
+        if(this.uniforms.containsKey("projectionMatrix")){
+            try {
+                this.loadMatrix("projectionMatrix", Render.projectionMatrix);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         shaders.add(this);
     }
 
@@ -52,10 +65,20 @@ public abstract class Shader {
         programID = GL20.glCreateProgram();
         GL20.glAttachShader(programID, vertexShader.getId());
         GL20.glAttachShader(programID, fragmentShader.getId());
+        bindAttributes();
         GL20.glLinkProgram(programID);
         GL20.glValidateProgram(programID);
-        //getAllUniformLocations();
-        bindAttributes();
+        uniforms = new HashMap<>();
+        getAllUniformLocations();
+        this.start();
+        if(this.uniforms.containsKey("projectionMatrix")){
+            try {
+                this.loadMatrix("projectionMatrix", Render.projectionMatrix);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        this.stop();
         shaders.add(this);
     }
 
@@ -71,36 +94,61 @@ public abstract class Shader {
 
     protected abstract void getAllUniformLocations();
 
-    protected int getUniformLocation(String uniformName) {
-        return GL20.glGetUniformLocation(programID, uniformName);
-    }
-
     protected void bindAttribute(int attribute, String variableName) {
         GL20.glBindAttribLocation(programID, attribute, variableName);
     }
 
-    protected void loadFloat(int location, float value) {
-        GL20.glUniform1f(location, value);
+    protected void createUniform(String uniformName) throws Exception {
+        int uniformLocation = GL20.glGetUniformLocation(programID,
+                uniformName);
+        if (uniformLocation < 0) {
+            throw new Exception("Could not create uniform:" +
+                    uniformName);
+        }
+        uniforms.put(uniformName, uniformLocation);
     }
 
-    protected void loadVector(int location, Vector3 vector) {
-        GL20.glUniform3f(location, (float) vector.getX(), (float) vector.getY(), (float) vector.getZ());
+    protected int getUniformID(String name) throws Exception {
+        if(!uniforms.containsKey(name)){
+            createUniform(name);
+        }
+
+        return uniforms.get(name);
     }
 
-    protected void loadBoolean(int location, boolean value) {
+    protected void loadFloat(String name, float value) throws Exception {
+        GL20.glUniform1f(getUniformID(name), value);
+    }
+
+    protected void loadVector(String name, Vector3 vector) throws Exception {
+        GL20.glUniform3f(getUniformID(name), (float) vector.getX(), (float) vector.getY(), (float) vector.getZ());
+    }
+
+    protected void loadBoolean(String name, boolean value) throws Exception {
         float tovec = 0;
         if(value) {
             tovec = 1;
         }
-        GL20.glUniform1f(location, tovec);
+        GL20.glUniform1f(getUniformID(name), tovec);
     }
 
+    protected void loadMatrix(String name, Matrix4f value) throws Exception {
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            FloatBuffer fb = stack.mallocFloat(16);
+            value.get(fb);
+            GL20.glUniformMatrix4fv(getUniformID(name), false, fb);
+        }
+    }
 
-    //TODO Add Matrix to Core
-    /*
-    protected void loadMatrix(int location, Matrix4f value) {
-        value.store(matrix);
-        matrix.flip();
-        GL20.glUniformMatrix4fv(location, false, matrix);
-    }*/
+    public static void reloadProjectionsMatrix(){
+        for(Shader current : shaders){
+            if(current.uniforms.containsKey("projectionMatrix")){
+                try {
+                    current.loadMatrix("projectionMatrix", Render.projectionMatrix);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

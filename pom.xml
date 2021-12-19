@@ -44,7 +44,7 @@
 
     <properties>
         <lwjgl.version>3.3.0</lwjgl.version>
-        <joml.version>1.9.6</joml.version>
+        <joml.version>1.10.3</joml.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <skipTests>true</skipTests>
         <!--<maven.compiler.source>14</maven.compiler.source>
