@@ -3,6 +3,8 @@ package com.kauruck.coastEngine.render.window;
 import com.kauruck.coastEngine.core.exception.NoSuchProcessException;
 import com.kauruck.coastEngine.core.input.Input;
 import com.kauruck.coastEngine.core.input.KeyCode;
+import com.kauruck.coastEngine.core.input.MouseButton;
+import com.kauruck.coastEngine.core.math.Vector2;
 import com.kauruck.coastEngine.render.input.KeyHelper;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -99,10 +101,44 @@ public class Window {
             }
         });
 
+        glfwSetMouseButtonCallback(id, (window, button, action, modes) -> {
+            MouseButton mouse;
+            switch (button){
+                case GLFW_MOUSE_BUTTON_LEFT:
+                        mouse = MouseButton.Left;
+                        break;
+                case GLFW_MOUSE_BUTTON_MIDDLE:
+                    mouse = MouseButton.Middle;
+                    break;
+                case GLFW_MOUSE_BUTTON_RIGHT:
+                    mouse = MouseButton.Right;
+                    break;
+                default:
+                    return;
+            }
+
+            if(action == GLFW_RELEASE)
+                Input.onMouseButtonUp(mouse);
+            else
+                Input.onMouseButtonDown(mouse);
+
+        });
+
+        glfwSetCursorPosCallback(id, (window, xpos, ypos) -> {
+            Vector2 newPos = new Vector2(xpos, ypos);
+
+            Input.onMouseMove(Input.getMousePos().subtract(newPos));
+        });
+
         glfwSetFramebufferSizeCallback(id, (window, nWidth, nHeight) -> {
             width = nWidth;
             height = nHeight;
             resized = true;
+        });
+
+        glfwSetScrollCallback(id, (window, xoffset, yoffset) -> {
+            float delta = (float) (Input.getScrollWheelPos() - yoffset);
+            Input.onScroll(delta);
         });
 
         // Get the thread stack and push a new frame
