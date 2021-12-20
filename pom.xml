@@ -38,7 +38,7 @@
     <distributionManagement>
         <repository>
             <id>kauruck-maven</id>
-            <url>http://maven-kauruck.ddns.net/snapshots</url>
+            <url>https://maven-kauruck.ddns.net/snapshots</url>
         </repository>
     </distributionManagement>
 

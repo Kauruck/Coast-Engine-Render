@@ -7,10 +7,9 @@ import com.kauruck.coastEngine.centum.world.World;
 import com.kauruck.coastEngine.core.Core;
 import com.kauruck.coastEngine.core.exception.NoHandlerException;
 import com.kauruck.coastEngine.core.input.Input;
-import com.kauruck.coastEngine.core.input.KeyAction;
+import com.kauruck.coastEngine.core.input.InputAction;
 import com.kauruck.coastEngine.core.input.KeyCode;
 import com.kauruck.coastEngine.core.math.Vector3;
-import com.kauruck.coastEngine.core.resources.ResourceHandler;
 import com.kauruck.coastEngine.core.resources.ResourceLoader;
 import com.kauruck.coastEngine.core.resources.ResourceLocation;
 import com.kauruck.coastEngine.render.Render;
@@ -50,10 +49,10 @@ public class Test {
             testEntity.addComponent(component);
             world.addEntity(testEntity);
             world.addEntity(testEntity2);
-            Input.registerKeyListener(KeyCode.B, KeyAction.Down, () -> {
+            Input.registerKeyListener(KeyCode.B, InputAction.Down, () -> {
                 square.setColor(new Color(0.0f, 0.0f, 1.0f, 1.0f));
             });
-            Input.registerKeyListener(KeyCode.G, KeyAction.Down, () -> {
+            Input.registerKeyListener(KeyCode.G, InputAction.Down, () -> {
                 square.setColor(new Color(0.0f, 1.0f, 0.0f, 1.0f));
             });
 
