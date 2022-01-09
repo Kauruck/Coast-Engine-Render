@@ -55,6 +55,8 @@ public class Render {
     public static  final List<RenderThreadScheduleWithCallback> schedules = new ArrayList<>();
 
     public static void init(){
+        //Register resource domain
+        ResourceLoader.RESOURCE_DOMAINS.add(Render.class);
         //Register resource loaders
         ResourceLoader.registerResourceHandler(new TextureHandler(), Texture.class);
         ResourceLoader.registerResourceHandler(new FragmentShaderHandler(), FragmentShader.class);

@@ -10,7 +10,6 @@ import com.kauruck.coastEngine.core.input.Input;
 import com.kauruck.coastEngine.core.input.InputAction;
 import com.kauruck.coastEngine.core.input.KeyCode;
 import com.kauruck.coastEngine.core.math.Vector3;
-import com.kauruck.coastEngine.core.resources.ResourceHandler;
 import com.kauruck.coastEngine.core.resources.ResourceLoader;
 import com.kauruck.coastEngine.core.resources.ResourceLocation;
 import com.kauruck.coastEngine.render.Render;
