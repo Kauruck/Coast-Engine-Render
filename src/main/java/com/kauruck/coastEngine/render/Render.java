@@ -52,7 +52,7 @@ public class Render {
         renders.add(render);
     }
 
-    private static  final List<RenderThreadScheduleWithCallback> schedules = new ArrayList<>();
+    public static  final List<RenderThreadScheduleWithCallback> schedules = new ArrayList<>();
 
     public static void init(){
         //Register resource loaders
@@ -76,12 +76,6 @@ public class Render {
                 current.create();
             }
 
-        },
-            (Centum.OnEndExecutor) Render::cleanUp
-        , (Centum.OnTickStartExecutor) Render::onTick,
-        (Centum.OnTickEndExecutor) () -> {
-            glfwSwapBuffers(Window.getId());
-            Input.update();
         });
     }
 
@@ -114,23 +108,6 @@ public class Render {
 
     }
 
-    public static void onTick(){
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT|GL11.GL_DEPTH_BUFFER_BIT);
-
-        if ( Window.isResized()) {
-            glViewport(0, 0, Window.getWidth(), Window.getHeight());
-            recreateProjectionMatrix();
-            Window.setResized(false);
-        }
-
-        List<RenderThreadScheduleWithCallback> toRender = List.copyOf(schedules);
-        schedules.clear();
-        for(RenderThreadScheduleWithCallback current : toRender){
-            current.execute();
-            current.callback();
-        }
-
-    }
 
     public static void showWindow(Runnable setup) {
         Thread thread = new Thread(setup);
@@ -164,7 +141,7 @@ public class Render {
         void execute();
     }
 
-    private static class RenderThreadScheduleWithCallback{
+    public static class RenderThreadScheduleWithCallback{
         private final RenderThreadSchedule schedule;
         private final RenderThreadCallback callback;
 
